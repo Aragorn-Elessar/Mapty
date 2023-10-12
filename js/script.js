@@ -33,16 +33,38 @@ if (navigator.geolocation)
       const coords = [latitude, longitude];
 
       const map = L.map('map').setView(coords, 13);
+      // console.log(map);
+
+      // Create marker on clicked position
+      const addMarker = function (coords, msg) {
+        L.marker(coords)
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent(msg)
+          .openPopup();
+      };
 
       L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      addMarker(coords, 'A pretty CSS popup.<br> Easily customizable.');
+
+      map.on('click', function (mapEvent) {
+        const { lat, lng } = mapEvent.latlng;
+        console.log(lat, lng);
+
+        addMarker([lat, lng], 'Workout');
+      });
     },
     function () {
       alert('Could not get your position');
