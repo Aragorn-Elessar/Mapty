@@ -3,6 +3,7 @@
 class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10);
+  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -17,6 +18,10 @@ class Workout {
     this.description = `${this.type[0].toUpperCase() + this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
+  }
+
+  click() {
+    this.clicks++;
   }
 }
 
@@ -54,6 +59,10 @@ class Cycling extends Workout {
   }
 }
 
+const run1 = new Running([39, -12], 5.2, 24, 178);
+const cycling1 = new Cycling([39, -12], 27, 95, 523);
+console.log(run1, cycling1);
+
 //////////////////////////////////////////
 // Application architecture
 
@@ -72,8 +81,13 @@ class App {
   #workouts = [];
 
   constructor() {
+    // Ger user's position
     this._getPosition();
 
+    // Get data from local storage
+    this._getLocalStorage();
+
+    // Attach event handlers
     // bind this to app object instead of form element
     form.addEventListener('submit', this._newWorkout.bind(this));
 
@@ -110,6 +124,11 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    // Render marker for localStorage after map is available
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -205,6 +224,9 @@ class App {
 
     // Hide form + clear input field
     this._hideForm(workout);
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   // Render workout on map as marker
@@ -290,6 +312,27 @@ class App {
       pan: {
         duration: 1,
       },
+    });
+
+    // Using the public interface
+    // workout.click();
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    console.log(data);
+
+    // Guard clause
+    if (!data) return;
+
+    this.#workouts = data;
+
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
     });
   }
 }
