@@ -105,21 +105,6 @@ class App {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
-    L.marker(coords)
-      .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 100,
-          autoClose: false,
-          closeButton: false,
-          closeOnClick: false,
-          className: 'running-popup',
-        })
-      )
-      .setPopupContent('Alo!')
-      .openPopup();
-
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
   }
@@ -143,7 +128,7 @@ class App {
     // Prevent animation in form class
     form.style.display = 'none';
     form.classList.add('hidden');
-    // Add grid value to restore display property effect
+    // Add grid value to restore display features
     setTimeout(() => (form.style.display = 'grid'), 1000);
   }
 
