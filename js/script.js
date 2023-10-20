@@ -20,9 +20,9 @@ class Workout {
     } ${this.date.getDate()}`;
   }
 
-  click() {
-    this.clicks++;
-  }
+  // click() {
+  //   this.clicks++;
+  // }
 }
 
 class Running extends Workout {
@@ -61,7 +61,6 @@ class Cycling extends Workout {
 
 const run1 = new Running([39, -12], 5.2, 24, 178);
 const cycling1 = new Cycling([39, -12], 27, 95, 523);
-console.log(run1, cycling1);
 
 //////////////////////////////////////////
 // Application architecture
@@ -209,12 +208,10 @@ class App {
 
       // Create new workout
       workout = new Cycling([lat, lng], distance, duration, elevation);
-      console.log(workout);
     }
 
     // Add new object to workouts array
     this.#workouts.push(workout);
-    console.log(this.#workouts);
 
     // Render workout on list
     this._renderWorkoutMarker(workout);
@@ -324,7 +321,6 @@ class App {
 
   _getLocalStorage() {
     const data = JSON.parse(localStorage.getItem('workouts'));
-    console.log(data);
 
     // Guard clause
     if (!data) return;
