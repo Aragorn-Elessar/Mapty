@@ -373,8 +373,6 @@ class App {
 }
 ```
 
-///////////////////////////////////////////////////////
-
 ### Application Sub Classes
 
 - A `Workout` class for shared data and a method to set the description for `Running` & `Cycling` classes
